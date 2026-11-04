@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Petualangan Tahapan Manusia</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff8dc;--card:#fff;--ink:#2b2d42;--blue:#3a86ff;--green:#2ecc71;--orange:#ff9f1c;--pink:#ff6b9d;--ok:#d9f7e4;--bad:#fff0d6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1f2540;--card:#2d3558;--ink:#fff8e7;--ok:#1d5a3a;--bad:#5a4320}}
+:root[data-theme="dark"]{--bg:#1f2540;--card:#2d3558;--ink:#fff8e7;--ok:#1d5a3a;--bad:#5a4320}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Baloo 2","Comic Sans MS",system-ui,sans-serif;font-size:18px;line-height:1.4}
+main{max-width:760px;margin:0 auto;padding:16px}
+section{display:none;animation:pop .4s}section.on{display:block}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+@keyframes bob{50%{transform:translateY(-12px)}}
+.card{background:var(--card);border-radius:24px;padding:20px;box-shadow:0 6px 0 rgba(0,0,0,.12);margin-bottom:14px}
+h1{font-size:2rem;margin:.2em 0;color:var(--blue)}h2{margin:.2em 0;color:var(--orange)}
+.big{font-size:4.5rem;display:inline-block;animation:bob 2s infinite}
+.center{text-align:center}
+button{font:inherit;font-weight:700;border:0;border-radius:18px;padding:10px 18px;margin:4px;background:var(--blue);color:#fff;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.2);transition:transform .15s}
+button:hover{transform:scale(1.05)}button:active{transform:translateY(3px)}
+button.alt{background:var(--green)}button.o{background:var(--orange)}
+input,textarea{font:inherit;width:100%;padding:10px;border-radius:14px;border:3px solid var(--blue);background:var(--card);color:var(--ink)}
+.tabs{display:flex;flex-wrap:wrap;justify-content:center}
+.tabs button{background:#ccd;color:#222}.tabs button.sel{background:var(--pink);color:#fff}
+.opt{display:block;width:100%;text-align:left;background:var(--card);color:var(--ink);border:3px solid var(--blue)}
+.opt.right{background:var(--ok);border-color:var(--green)}.opt.wrong{background:var(--bad);border-color:var(--orange)}
+.fb{padding:12px;border-radius:16px;margin-top:10px;animation:pop .3s}.fb.ok{background:var(--ok)}.fb.bad{background:var(--bad)}
+.bar{height:14px;background:#0002;border-radius:9px;overflow:hidden;margin-bottom:10px}.bar i{display:block;height:100%;background:var(--green);transition:width .4s}
+.slots{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0}
+.slot{min-width:92px;min-height:70px;border:3px dashed var(--orange);border-radius:16px;padding:6px;text-align:center}
+.chip{background:var(--card);border:3px solid var(--blue);color:var(--ink);box-shadow:none}
+li{margin:4px 0}
+</style>
+</head>
+<body>
+<main>
+
+<section id="s0" class="on"><div class="card center">
+<div class="big">👶🧒🧑‍🎓🧑‍💼👴</div>
+<h1>Petualangan Tahapan Manusia</h1>
+<p>Media Belajar IPAS · Kelas 3 · Fase B</p>
+<p>Halo, teman hebat! Siapa namamu? ✏️</p>
+<input id="nm" placeholder="Tulis namamu di sini" maxlength="30">
+<p><button onclick="start()">Ayo Mulai! 🚀</button></p>
+</div></section>
+
+<section id="s1"><div class="card">
+<h2>🎯 Tujuan Pembelajaran</h2>
+<p>Hai <b class="nmv">teman</b>! Setelah belajar ini, kamu akan bisa:</p>
+<ul><li>⭐ Menyebutkan tahapan-tahapan manusia.</li><li>⭐ Membedakan ciri setiap tahapan.</li><li>⭐ Mengurutkan tahapan dari bayi sampai lansia.</li></ul>
+<div class="center"><button onclick="go(2)">Lanjut ➡️</button></div>
+</div></section>
+
+<section id="s2"><div class="card">
+<h2>📖 Belajar Yuk!</h2>
+<p>Manusia tumbuh dan berkembang. Ada 5 tahapan. Tekan gambarnya ya!</p>
+<div class="tabs" id="tabs"></div>
+<div class="card center" id="info" style="background:var(--bg)"></div>
+<div class="center"><button onclick="go(3)">Main Aktivitas 🎮</button></div>
+</div></section>
+
+<section id="s3"><div class="card">
+<h2>🎮 Aktivitas 1: Urutkan Aku!</h2>
+<p>Tekan kartu sesuai urutan, dari yang paling muda sampai paling tua.</p>
+<div class="slots" id="slots"></div>
+<div class="slots" id="pool"></div>
+<div id="a1fb"></div><button class="o" onclick="initA1()">Ulangi 🔄</button>
+</div>
+<div class="card">
+<h2>🎮 Aktivitas 2: Tebak Tahapanku!</h2>
+<p id="clue" style="font-size:1.2rem"></p>
+<div class="tabs" id="guess"></div><div id="a2fb"></div>
+<div class="center"><button onclick="go(4)">Ke Kuis 📝</button></div>
+</div></section>
+
+<section id="s4"><div class="card">
+<div class="bar"><i id="pb" style="width:0"></i></div>
+<p>Soal <b id="qn"></b> dari 20</p>
+<h2 id="qt" style="color:var(--ink)"></h2>
+<div id="qa"></div><div id="qfb"></div>
+</div></section>
+
+<section id="s5"><div class="card center">
+<div class="big" id="trophy">🏆</div>
+<h1>Hebat, <span class="nmv">teman</span>!</h1>
+<p id="score" style="font-size:1.5rem"></p><p id="stars" style="font-size:2rem"></p>
+<p id="msg"></p>
+</div>
+<div class="card">
+<h2>💭 Refleksi</h2>
+<p>1. Bagaimana perasaanmu setelah belajar?</p>
+<div class="tabs" id="mood"></div>
+<p>2. Tahapan manusia apa yang paling kamu ingat? Kenapa?</p>
+<textarea id="ref" rows="3" placeholder="Tulis jawabanmu..."></textarea>
+<p class="center"><button class="alt" onclick="fin()">Kirim ✅</button></p>
+<p id="fin" class="center"></p>
+<div class="center"><button class="o" onclick="location.reload()">Main Lagi 🔄</button></div>
+</div></section>
+
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const S=[
+{n:"Bayi",e:"👶",u:"0–2 tahun",c:["Minum ASI atau susu","Banyak tidur","Belum bisa berjalan dan berbicara jelas","Tubuh tumbuh cepat"]},
+{n:"Anak-anak",e:"🧒",u:"3–11 tahun",c:["Suka bermain","Belajar di sekolah","Gigi susu berganti gigi tetap","Mulai pandai membaca dan menulis"]},
+{n:"Remaja",e:"🧑‍🎓",u:"12–17 tahun",c:["Tubuh cepat tinggi","Suara berubah","Mulai tumbuh jerawat","Mulai mandiri"]},
+{n:"Dewasa",e:"🧑‍💼",u:"18–59 tahun",c:["Bekerja mencari nafkah","Tubuh sudah berhenti tinggi","Merawat keluarga","Mandiri dan bertanggung jawab"]},
+{n:"Lansia",e:"👴👵",u:"60 tahun ke atas",c:["Rambut beruban","Kulit mulai keriput","Berjalan lebih pelan","Perlu disayang dan dibantu"]}];
+const OKS=["Hebat sekali! 🌟","Pintar! Kamu luar biasa! 👏","Keren! Jawabanmu tepat! 🎉","Bagus sekali, teruskan ya! 💪"];
+const BADS=["Tidak apa-apa, ayo coba lagi nanti! Kamu pasti bisa! 💛","Jangan menyerah ya, kesalahan membuat kita makin pintar! 🌈","Semangat! Belajar sedikit lagi, kamu hampir bisa! 🚀"];
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const Q=[
+{t:"Manusia yang baru lahir disebut ...",o:["Bayi","Remaja","Dewasa","Lansia"],a:0},
+{t:"Sebutkan tahapan manusia yang pertama setelah lahir!",k:["bayi"],m:"Bayi"},
+{t:"Ciri bayi adalah ...",o:["Bekerja di kantor","Minum ASI dan banyak tidur","Rambut beruban","Suara berubah"],a:1},
+{t:"Apa makanan utama bayi?",k:["asi","susu"],m:"ASI atau susu"},
+{t:"Murid SD termasuk tahapan ...",o:["Bayi","Anak-anak","Dewasa","Lansia"],a:1},
+{t:"Sebutkan satu kegiatan anak-anak!",k:["main","sekolah","belajar"],m:"Bermain atau belajar di sekolah"},
+{t:"Tahapan antara anak-anak dan dewasa adalah ...",o:["Bayi","Lansia","Remaja","Balita"],a:2},
+{t:"Sebutkan satu ciri remaja!",k:["suara","jerawat","tinggi","tumbuh","mandiri"],m:"Suara berubah, tumbuh jerawat, atau cepat tinggi"},
+{t:"Suara berubah dan tumbuh jerawat adalah ciri ...",o:["Bayi","Remaja","Lansia","Anak-anak"],a:1},
+{t:"Tahapan manusia yang sudah bekerja dan mandiri adalah ...?",k:["dewasa"],m:"Dewasa"},
+{t:"Orang dewasa biasanya ...",o:["Minum ASI","Bekerja mencari nafkah","Belum bisa berjalan","Bermain saja"],a:1},
+{t:"Sebutkan satu pekerjaan orang dewasa!",k:["guru","dokter","petani","pedagang","polisi","tentara","sopir","pegawai","perawat","nelayan","koki","insinyur","bekerja","kerja","penjual","pilot","montir"],m:"Misalnya guru, dokter, atau petani"},
+{t:"Kakek dan nenek termasuk tahapan ...",o:["Dewasa","Remaja","Lansia","Bayi"],a:2},
+{t:"Sebutkan satu ciri lansia!",k:["rambut","uban","keriput","pelan","lambat","kulit","tua","jalan"],m:"Rambut beruban, kulit keriput, atau berjalan pelan"},
+{t:"Urutan tahapan manusia yang benar adalah ...",o:["Bayi, Anak-anak, Remaja, Dewasa, Lansia","Anak-anak, Bayi, Dewasa, Remaja, Lansia","Lansia, Dewasa, Remaja, Anak-anak, Bayi","Bayi, Remaja, Anak-anak, Lansia, Dewasa"],a:0},
+{t:"Tulis urutan tahapan manusia dari bayi sampai lansia!",all:["bayi","anak","remaja","dewasa","lansia"],m:"Bayi, Anak-anak, Remaja, Dewasa, Lansia"},
+{t:"Tahapan manusia yang paling tua adalah ...",o:["Dewasa","Remaja","Anak-anak","Lansia"],a:3},
+{t:"Adi berumur 10 tahun. Adi termasuk tahapan ...",o:["Bayi","Anak-anak","Dewasa","Lansia"],a:1},
+{t:"Mengapa kita harus menghormati lansia?",k:["hormat","sayang","tua","jasa","bantu","pengalaman","rawat","baik"],m:"Karena mereka sudah tua, banyak berjasa, dan perlu kita sayangi"},
+{t:"Kamu sekarang berada pada tahapan apa?",k:["anak"],m:"Anak-anak"}];
+
+function go(n){document.querySelectorAll("section").forEach(s=>s.classList.remove("on"));$("s"+n).classList.add("on");scrollTo(0,0);if(n==3){initA1();nextClue()}if(n==4)showQ()}
+let name="teman";
+function start(){name=$("nm").value.trim()||"teman";document.querySelectorAll(".nmv").forEach(e=>e.textContent=name);go(1)}
+
+// Materi
+$("tabs").innerHTML=S.map((s,i)=>`<button onclick="tab(${i})" id="t${i}">${s.e.slice(0,2)} ${s.n}</button>`).join("");
+function tab(i){document.querySelectorAll("#tabs button").forEach(b=>b.classList.remove("sel"));$("t"+i).classList.add("sel");const s=S[i];
+$("info").innerHTML=`<div class="big">${s.e}</div><h2>${s.n}</h2><p><b>Usia:</b> kira-kira ${s.u}</p><ul style="text-align:left">${s.c.map(c=>"<li>"+c+"</li>").join("")}</ul>`}
+tab(0);
+
+// Aktivitas 1
+let nxt=0;
+function initA1(){nxt=0;$("a1fb").innerHTML="";$("slots").innerHTML=S.map((s,i)=>`<div class="slot" id="sl${i}">${i+1}</div>`).join("");
+const o=S.map((s,i)=>i).sort(()=>Math.random()-.5);
+$("pool").innerHTML=o.map(i=>`<button class="chip" id="c${i}" onclick="put(${i})">${S[i].e.slice(0,2)} ${S[i].n}</button>`).join("")}
+function put(i){if(i==nxt){$("sl"+i).innerHTML=S[i].e.slice(0,2)+"<br>"+S[i].n;$("c"+i).remove();nxt++;
+$("a1fb").innerHTML=nxt==5?`<div class="fb ok">${pick(OKS)} Urutanmu benar!</div>`:""}
+else $("a1fb").innerHTML=`<div class="fb bad">Belum tepat. Cari yang lebih muda dulu ya, semangat! 💛</div>`}
+
+// Aktivitas 2
+const CL=[["Aku minum ASI dan banyak tidur.",0],["Aku suka bermain dan belajar di sekolah.",1],["Suaraku berubah dan jerawat mulai tumbuh.",2],["Aku bekerja untuk keluargaku.",3],["Rambutku beruban dan jalanku pelan.",4]];
+let ci=-1;
+$("guess").innerHTML=S.map((s,i)=>`<button onclick="chk(${i})">${s.e.slice(0,2)} ${s.n}</button>`).join("");
+function nextClue(){ci=(ci+1)%5;$("clue").textContent="🔍 "+CL[ci][0];$("a2fb").innerHTML=""}
+function chk(i){if(i==CL[ci][1]){$("a2fb").innerHTML=`<div class="fb ok">${pick(OKS)} <button class="o" onclick="nextClue()">Tebakan berikutnya ➡️</button></div>`}
+else $("a2fb").innerHTML=`<div class="fb bad">${pick(BADS)}</div>`}
+
+// Kuis
+let qi=0,sc=0,done=false;
+function showQ(){const q=Q[qi];done=false;$("qn").textContent=qi+1;$("pb").style.width=(qi/20*100)+"%";$("qt").textContent=q.t;$("qfb").innerHTML="";
+if(q.o)$("qa").innerHTML=q.o.map((o,i)=>`<button class="opt" onclick="ans(${i},this)">${"ABCD"[i]}. ${o}</button>`).join("");
+else $("qa").innerHTML=`<input id="ei" placeholder="Tulis jawabanmu..."><p><button class="alt" onclick="ess()">Kirim jawaban ✅</button></p>`}
+function fb(ok,m){if(ok)sc++;done=true;
+$("qfb").innerHTML=`<div class="fb ${ok?"ok":"bad"}">${ok?pick(OKS):pick(BADS)}${ok?"":"<br>Jawaban yang tepat: <b>"+m+"</b>"}</div><p class="center"><button onclick="nq()">${qi==19?"Lihat Hasil 🏆":"Soal berikutnya ➡️"}</button></p>`}
+function ans(i,b){if(done)return;const q=Q[qi];const bs=document.querySelectorAll(".opt");bs[q.a].classList.add("right");if(i!=q.a)b.classList.add("wrong");fb(i==q.a,q.o[q.a])}
+function ess(){if(done)return;const v=$("ei").value.toLowerCase().trim();if(!v){$("qfb").innerHTML=`<div class="fb bad">Tulis jawabanmu dulu ya ✏️</div>`;return}
+const q=Q[qi];const ok=q.all?q.all.every(w=>v.includes(w)):q.k.some(w=>v.includes(w));$("ei").disabled=true;fb(ok,q.m)}
+function nq(){if(qi==19)return result();qi++;showQ()}
+function result(){go(5);const p=sc*5;$("score").textContent=`Nilaimu: ${p} (benar ${sc} dari 20)`;
+const st=sc>=17?3:sc>=12?2:1;$("stars").textContent="⭐".repeat(st)+"☆".repeat(3-st);
+$("msg").textContent=sc>=17?"Luar biasa! Kamu ahli tahapan manusia! 🎉":sc>=12?"Bagus sekali! Sedikit lagi sempurna! 👏":"Terus semangat belajar ya, kamu pasti makin pintar! 💪"}
+
+// Refleksi
+$("mood").innerHTML=["😄 Senang","🙂 Biasa","😕 Masih bingung"].map(m=>`<button onclick="this.parentNode.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')">${m}</button>`).join("");
+function fin(){$("fin").textContent=`Terima kasih, ${name}! Kamu sudah belajar dengan semangat. Sampai jumpa di petualangan berikutnya! 🌈`}
+</script>
+</body>
+</html>
